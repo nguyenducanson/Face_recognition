@@ -1,0 +1,22 @@
+version: "3.9"
+
+x-common-variables: &common-variables
+  SERVER_VERSION: ${SERVER_VERSION}
+  QDRANT_GRPC_PORT: ${QDRANT_GRPC_PORT}
+
+x-deploy-config: &deploy-config
+  resources:
+    reservations:
+      devices:
+        - driver: nvidia
+          device_ids: [ "0" ]
+          capabilities: [ gpu ]
+
+services:
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    ports:
+      - ${QDRANT_GRPC_PORT}:6334
+    restart: always
+    environment: *common-variables
